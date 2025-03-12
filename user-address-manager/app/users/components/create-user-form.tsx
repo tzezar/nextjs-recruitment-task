@@ -1,0 +1,128 @@
+"use client";
+
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { useActionState, useRef } from "react";
+import { userInsertSchema } from "@/lib/types/validation";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { createUserAction } from "@/lib/actions/user-actions";
+import FormFlashMessage from "@/components/blocks/form-message";
+
+export default function CreateUserForm() {
+  const [state, formAction] = useActionState(createUserAction, {
+    message: "",
+  });
+
+  const form = useForm<z.output<typeof userInsertSchema>>({
+    resolver: zodResolver(userInsertSchema),
+    defaultValues: {
+      ...state?.fields,
+    },
+  });
+
+  const formRef = useRef<HTMLFormElement>(null);
+
+  return (
+    <Form {...form}>
+      <form
+        ref={formRef}
+        action={formAction}
+        onSubmit={form.handleSubmit(() => {
+          formAction(new FormData(formRef.current!));
+        })}
+        className="space-y-8"
+      >
+        <FormField
+          control={form.control}
+          name="firstName"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>First Name</FormLabel>
+              <FormControl>
+                <Input placeholder="Sebastian" {...field} />
+              </FormControl>
+
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="lastName"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Last Name</FormLabel>
+              <FormControl>
+                <Input placeholder="Drozd" {...field} />
+              </FormControl>
+
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="email"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Email</FormLabel>
+              <FormControl>
+                <Input placeholder="tzezar44@gmail.com" {...field} />
+              </FormControl>
+
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="status"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Status</FormLabel>
+              <Select onValueChange={field.onChange} {...field}>
+                <FormControl>
+                  <SelectTrigger className="w-full">
+                    <SelectValue placeholder="Select user status" />
+                  </SelectTrigger>
+                </FormControl>
+                <SelectContent>
+                  <SelectItem value="ACTIVE">Active</SelectItem>
+                  <SelectItem value="INACTIVE">Inactive</SelectItem>
+                </SelectContent>
+              </Select>
+              <FormDescription>
+                Determines if the user is active or inactive
+              </FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <Button type="submit" className="self-end">
+          Create user
+        </Button>
+      </form>
+      <FormFlashMessage state={state} />
+    </Form>
+  );
+}

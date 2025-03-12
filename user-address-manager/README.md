@@ -1,4 +1,4 @@
- approached this task as an opportunity to learn something new, so I decided to give ShadCN UI a try. Unfortunately, I ran into a few tricky bugs while implementing the features. I also considered using Tanstack Table and Tanstack Query, but the scale of the project was too small for that to be necessary.
+I approached this task as an opportunity to learn something new, so I decided to give ShadCN UI a try. Unfortunately, I ran into a few tricky bugs while implementing the features. I also considered using Tanstack Table and Tanstack Query, but the scale of the project was too small for that to be necessary.
 
 During the task, I encountered several bugs in ShadCN UI, such as:
 https://github.com/shadcn-ui/ui/issues/468
